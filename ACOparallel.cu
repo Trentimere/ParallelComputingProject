@@ -255,7 +255,7 @@ __global__ void ACO_kernel(double* distances, double* pheremones,
 			   double* bestLengths, int* bestPaths,
 			   int* tPaths, struct NodeList** tNacc,
 			   struct NodeList* tNodes, struct NodeList* tHeads,
-			   int* tPosN, double* tWeights)
+			   int* tPosN, double* tWeights, long rseed)
 {
   extern __shared__ double pathLengths[];
   int bindex = blockIdx.x;
@@ -263,7 +263,7 @@ __global__ void ACO_kernel(double* distances, double* pheremones,
   curandState_t state;
   int currAnt = bindex*blockDim.x + tindex;
 
-  curand_init(0, currAnt, 0, &state);
+  curand_init(0, rseed + currAnt, 0, &state);
 
   int* path = &tPaths[n*currAnt]; // variable to hold paths
 
@@ -460,7 +460,8 @@ void iterateParallel(double* distances, double* pheremones, int n, long ants,
 						   n, alpha, beta,
 						   bestLengths, bestPaths,
 						   tPaths, tNacc, tNodes,
-						   tHeads, tPosN, tWeights);
+						   tHeads, tPosN, tWeights,
+						   g*ants);
     // sync the kernels so all results are in before continuing
     cudaDeviceSynchronize();
 
