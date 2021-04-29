@@ -513,6 +513,18 @@ void iterateParallel(double* distances, double* pheremones, int n, long ants,
   cudaFree(tWeights);
 }
 
+typedef unsigned long long ticks;
+static __inline__ ticks getticks(void)
+{
+unsigned int tbl, tbu0, tbu1;
+do {
+__asm__ __volatile__ ("mftbu %0" : "=r"(tbu0));
+__asm__ __volatile__ ("mftb %0" : "=r"(tbl));
+__asm__ __volatile__ ("mftbu %0" : "=r"(tbu1));
+} while (tbu0 != tbu1);
+return ((((unsigned long long)tbu0) << 32) | tbl);
+}
+
 int main(int argc, char** argv)
 {
   if (argc < 2)
@@ -660,13 +672,17 @@ int main(int argc, char** argv)
   for (int i = 0; i < combinations; i++)
     pheremones[i] = 1.0;
 
+  ticks current_ti_1 = getticks();
   iterateParallel(distances, pheremones, n, ants, p, alpha, beta,
 		  generations, genName, nodes);
 
   // overall best path after all generations
   int* path = getBestPath(distances, pheremones, n, alpha, beta);
   double minLength = pathLength(path, nodes, n);
-
+  
+  ticks current_ti_2 = getticks();
+  printf("Cycles: %llu\n",current_ti_2);
+  printf("Cycles: %llu\n",current_ti_2 - current_ti_1);
   // write out the nodes and the best path to files
   file = fopen(filename, "w+");
   pfile = fopen(pathname, "w+");
@@ -693,6 +709,7 @@ int main(int argc, char** argv)
 
   cudaFree(distances);
   cudaFree(pheremones);
+
   
   return EXIT_SUCCESS;
 }
