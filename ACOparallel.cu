@@ -681,7 +681,6 @@ int main(int argc, char** argv)
   double minLength = pathLength(path, nodes, n);
   
   ticks current_ti_2 = getticks();
-  printf("Cycles: %llu\n",current_ti_2);
   printf("Cycles: %llu\n",current_ti_2 - current_ti_1);
   // write out the nodes and the best path to files
   file = fopen(filename, "w+");
