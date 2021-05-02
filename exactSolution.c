@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-	printf("Usage: Specify number of nodes in TSP, e.g. ./exactSolution-exe 10\n\tadditional options:\n\n\t-n <filename>\tspecify file with node locations to use in the format:\n\t\tx1,y1\n\t\tx2,y2\n\t\t . .\n\t\t . .\n\t\t . .\n\t\txn,yn\n\t-s seed\t\tspecify seed for random node generations\n\t-f <filename>\tspecify file to write nodes to (default: nodes.txt)\n\t-p <filename>\tspecify file to write path to (default: path.txt)\n");
+	printf("Usage: Specify number of nodes in TSP, e.g. ./exactSolution-exe 10\n\tadditional options:\n\n\t-n <filename>\tspecify file with node locations to use in the format:\n\t\tx1,y1\n\t\tx2,y2\n\t\t . .\n\t\t . .\n\t\t . .\n\t\txn,yn\n\t-s seed\t\tspecify seed for random node generations\n\t-f <filename>\tspecify file to write nodes to (default: nodes.txt)\n\t-pf <filename>\tspecify file to write path to (default: path.txt)\n");
 
 	exit(EXIT_FAILURE);
   }
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
   char* nodeStr = "-n";
   char* seedStr = "-s";
   char* fileStr = "-f";
-  char* pathStr = "-p";
+  char* pathStr = "-pf";
   for (int i = 2; i < argc; i++)
   {
 	if (strcmp(argv[i], nodeStr) == 0)
